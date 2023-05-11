@@ -1,0 +1,25 @@
+.App {
+  text-align: center;
+  display: flex;
+  gap: 2rem;
+  margin: 5rem;
+  justify-content: center;
+}
+
+select {
+  width: 10rem;
+  height: 2rem;
+}
+.category {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.food-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+h1 {
+  display: block;
+}
