@@ -33,52 +33,65 @@ const items = [
 ];
 
 function App() {
-  const [category, setCategory] = useState([]);
-  const [item, setItem] = useState();
+  const [itemList, setItemList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState();
+  const [itemName, setItemName] = useState();
+  useEffect(() => {
+    setItemList(items);
+  }, []);
+
+  const getFilteredList = () => {
+    if (!selectedCategory) return itemList;
+
+    return itemList.filter((item) => {
+      return item.category === selectedCategory;
+    });
+  };
+
+  const filteredList = useMemo(getFilteredList, [selectedCategory, itemList]);
+
+  const categories = [...new Set(itemList.map((item) => item.category))];
 
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+    setSelectedCategory(e.target.value);
   };
 
-  function getFilteredList() {
-    if (!category) {
-      return items;
-    }
-
-    return items.filter((item) => item.category === category);
-  }
-
-  let filteredList = useMemo(getFilteredList, [category]);
-
-  const handleItemChange = (e) => {
-    setItem(e.target.value);
+  const handleItemName = (e) => {
+    setItemName(e.target.value);
   };
-  console.log(filteredList);
 
   return (
-    <div className="App">
-      <h1>{item}</h1>
-
-      <div className="category">
-        <p>Category</p>
-        <select value="category-list" onChange={handleCategoryChange}>
-          <option value="">{category}</option>
-          <option value="meat">meat</option>
-          <option value="fruit">fruit</option>
-          <option value="vegetable">vegetable</option>
-        </select>
-      </div>
-      <div className="food-name">
-        <p>Item</p>
-        <select onChange={handleItemChange}>
-          {filteredList.map((el, index) => {
-            return (
-              <option key={index} value={el.name}>
-                {el.name}
-              </option>
-            );
-          })}
-        </select>
+    <div>
+      {itemName && <h1>{itemName}</h1>}
+      <div className="filter-container">
+        <div className="category-container">
+          <p>Category</p>
+          <select
+            name="category-list"
+            id="category-list"
+            onChange={handleCategoryChange}
+          >
+            {categories.map((item, i) => {
+              return (
+                <option key={i} value={item}>
+                  {item}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="name-container">
+          <p>Name</p>
+          <select onChange={handleItemName}>
+            {filteredList.map((el, idx) => {
+              return (
+                <option key={idx} value={el.name}>
+                  {el.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
       </div>
     </div>
   );
